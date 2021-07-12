@@ -68,6 +68,18 @@ let main = command(
                     print(error.localizedDescription)
                 }
             }
+            
+            if output_path.contains(".csv") {
+                let csv = CSV(path: output_path,
+                                dictinary: dic,
+                                isVerbose: isVerbose,
+                                totalCount: files.count)
+                do {
+                    try csv.write()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
         }
     } catch {
         print(error.localizedDescription)
