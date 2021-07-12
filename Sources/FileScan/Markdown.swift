@@ -49,7 +49,6 @@ final class Markdown {
                 text.append("|\(key)  |\(value.count)  |\(steps)  |\(words)  | \(numRound)%|")
             }
         }
-        text.append("|")
         text.append("|**Total**  |**\(totalCount)** |**\(totalStepsCount)**  |**\(totalWordsCount)**  |100%  |")
         if isVerbose {
             print(text.joined(separator: "\n"))
