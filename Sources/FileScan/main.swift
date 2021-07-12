@@ -8,6 +8,7 @@ let main = command(
     Option<String?>("ignore_paths", default: nil, description: "ignore files"),
     Option<String>("verbose", default: "false", description: "Display the log")
 ) { sourcePath, output_path, ignore_paths, verbose in
+    let startDate = Date()
     let isVerbose = verbose.lowercased() == "true"
     do {
         let folder = try Folder(path: sourcePath)
@@ -16,7 +17,7 @@ let main = command(
         if let ignore_paths = ignore_paths {
             let ignorePaths = ignore_paths.split(separator: ",")
             ignorePaths.forEach { path in
-                files = files.filter { !$0.path.contains(path)}
+                files = files.lazy.filter { !$0.path.contains(path)}
             }
         }
         
@@ -38,7 +39,7 @@ let main = command(
         let keys = dic.keys.sorted()
         let totalCount = files.count
         keys.forEach { key in
-            let code = dic[key]?.reduce(0) { result, file in
+            let code = dic[key]?.lazy.reduce(0) { result, file in
                 return (try? file.readAsString().count) ?? 0 + result
             } ?? 0
             let value = dic[key] ?? []
@@ -74,6 +75,10 @@ let main = command(
     } catch {
         print(error.localizedDescription)
     }
+    let endDate = Date()
+    if isVerbose {
+        print("Total time: \(endDate.timeIntervalSince(startDate))")
+    }
 }
 
 func find(folder: Folder) -> [File] {
@@ -90,13 +95,6 @@ func find(folder: Folder) -> [File] {
     }
     
     return files
-}
-
-func funcTime(_ log: String, action: () -> Void) {
-    let startDate = Date()
-    action()
-    let endDate = Date()
-    print("\(log) \(endDate.timeIntervalSince(startDate))")
 }
 
 main.run()
