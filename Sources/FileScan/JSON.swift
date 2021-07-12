@@ -15,10 +15,7 @@ final class JSON {
         self.totalCount = totalCount
     }
     
-    func write() throws {
-        var text: [String] = []
-        text.append("|Language  |Files  |Number of steps  |Number of words  |Percentage  |")
-        
+    func write() throws {        
         let keys = dictinary.keys.sorted()
         var totalWordsCount = 0
         var totalStepsCount = 0
