@@ -1,0 +1,32 @@
+{
+  "json" : {
+    "files" : 1,
+    "number_of_steps" : 32,
+    "number_of_words" : 580,
+    "percentage" : 10
+  },
+  "md" : {
+    "files" : 1,
+    "number_of_steps" : 8,
+    "number_of_words" : 284,
+    "percentage" : 10
+  },
+  "swift" : {
+    "files" : 8,
+    "number_of_steps" : 84,
+    "number_of_words" : 931,
+    "percentage" : 80
+  },
+  "swiftUI" : {
+    "files" : 1,
+    "number_of_steps" : 21,
+    "number_of_words" : 294,
+    "percentage" : 12.5
+  },
+  "total" : {
+    "files" : 10,
+    "number_of_steps" : 124,
+    "number_of_words" : 1795,
+    "percentage" : 100
+  }
+}

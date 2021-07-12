@@ -20,10 +20,7 @@ let main = command(
                 files = files.lazy.filter { !$0.path.contains(path)}
             }
         }
-        
-        var text: [String] = []
-        text.append("|Language  |files  |code  |percentage  |")
-        text.append("|---|---|---|---|")
+        let swiftUIKey = "swiftUI"
         var dic: [String: [File]] = [:]
         files.forEach { file in
             guard let extensionValue = file.extension else {
@@ -35,41 +32,41 @@ let main = command(
             } else {
                 dic[extensionValue] = [file]
             }
-        }
-        let keys = dic.keys.sorted()
-        let totalCount = files.count
-        keys.forEach { key in
-            let code = dic[key]?.lazy.reduce(0) { result, file in
-                return (try? file.readAsString().count) ?? 0 + result
-            } ?? 0
-            let value = dic[key] ?? []
-            let percentage: Double = (Double(value.count) / Double(totalCount)) * 100
-            let numRound = round(percentage * 10) / 10
-            text.append("|\(key)  |\(value.count)  | \(code) | \(numRound)%|")
-        }
-        text.append("")
-        text.append("total number of files: \(totalCount)")
-        if isVerbose {
-            print(text.joined(separator: "\n"))
-        }
-        if let outputPath = output_path {
-            let urlPath = URL(fileURLWithPath: outputPath)
-            let path = urlPath.deletingLastPathComponent().absoluteString
-            let _path = path.replacingOccurrences(of: "file://", with: "")
-            let fileName = urlPath.lastPathComponent
-            do {
-                let outputFolder = try Folder(path: _path)
-                let file = try outputFolder.createFileIfNeeded(at: fileName.replacingOccurrences(of: "file://", with: ""))
-                let result = text.joined(separator: "\n")
-                let oldData = try file.readAsString()
-                if oldData == result {
-                    print("Not writing the file as content is unchanged")
+            
+            if let value = try? file.readAsString(),
+               value.contains("import SwiftUI"),
+               value.contains("var body: some View {") {
+                if var value = dic[swiftUIKey] {
+                    value.append(file)
+                    dic[swiftUIKey] = value
                 } else {
-                    try file.write(result)
-                    print("Generate Success")
+                    dic[swiftUIKey] = [file]
                 }
-            } catch {
-                print(error.localizedDescription)
+            }
+        }
+        if let output_path = output_path {
+            if output_path.contains(".md") {
+                let markdown = Markdown(path: output_path,
+                                        dictinary: dic,
+                                        isVerbose: isVerbose,
+                                        totalCount: files.count)
+                do {
+                    try markdown.write()
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+            
+            if output_path.contains(".json") {
+                let json = JSON(path: output_path,
+                                dictinary: dic,
+                                isVerbose: isVerbose,
+                                totalCount: files.count)
+                do {
+                    try json.write()
+                } catch {
+                    print(error.localizedDescription)
+                }
             }
         }
     } catch {
