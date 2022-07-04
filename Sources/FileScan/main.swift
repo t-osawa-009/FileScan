@@ -8,8 +8,9 @@ let main = command(
     Option<String?>("ignore_paths", default: nil, description: "ignore files"),
     Option<String?>("ignore_extension", default: nil, description: "ignore extension"),
     Option<String>("verbose", default: "false", description: "Display the log"),
+    Option<Int>("decimal_point", default: 2, description: "Number of decimal places for%"),
     Option<String?>("join", default: nil, description: "Merging the results of multiple paths")
-) { sourcePath, output_path, ignore_paths, ignore_extension, verbose, join_path in
+) { sourcePath, output_path, ignore_paths, ignore_extension, verbose, decimal_point, join_path in
     let startDate = Date()
     let isVerbose = verbose.lowercased() == "true"
     var ignorePaths: [String] = []
@@ -71,7 +72,8 @@ let main = command(
             let markdown = Markdown(path: output_path,
                                     dictinary: dic,
                                     isVerbose: isVerbose,
-                                    totalCount: files.count)
+                                    totalCount: files.count,
+                                    decimalPoint: decimal_point)
             do {
                 try markdown.write()
             } catch {
@@ -83,7 +85,8 @@ let main = command(
             let json = JSON(path: output_path,
                             dictinary: dic,
                             isVerbose: isVerbose,
-                            totalCount: files.count)
+                            totalCount: files.count,
+                            decimalPoint: decimal_point)
             do {
                 try json.write()
             } catch {
@@ -95,7 +98,8 @@ let main = command(
             let csv = CSV(path: output_path,
                           dictinary: dic,
                           isVerbose: isVerbose,
-                          totalCount: files.count)
+                          totalCount: files.count,
+                          decimalPoint: decimal_point)
             do {
                 try csv.write()
             } catch {

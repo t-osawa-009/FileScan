@@ -7,12 +7,14 @@ final class JSON {
     private var isVerbose: Bool
     private var totalCount: Int
     private let swiftUIKey = "swiftUI"
-    
-    init(path: String, dictinary: [String: [File]], isVerbose: Bool, totalCount: Int) {
+    private let decimalPoint: Int
+
+    init(path: String, dictinary: [String: [File]], isVerbose: Bool, totalCount: Int, decimalPoint: Int) {
         self.path = path
         self.dictinary = dictinary
         self.isVerbose = isVerbose
         self.totalCount = totalCount
+        self.decimalPoint = decimalPoint
     }
     
     func write() throws {        
@@ -41,14 +43,26 @@ final class JSON {
             if key == swiftUIKey {
                 let swiftTotalCount = dictinary["swift"]?.count ?? 0
                 let percentage: Double = (Double(value.count) / Double(swiftTotalCount)) * 100
-                let numRound = round(percentage * 100) / 100
-                dict["percentage"] = numRound
+                if decimalPoint > 0 {
+                    let decimalNumber = NSDecimalNumber(decimal: pow(10, decimalPoint))
+                    let numRound = round(percentage * decimalNumber.doubleValue) / decimalNumber.doubleValue
+                    dict["percentage"] = numRound
+                } else {
+                    dict["percentage"] = percentage
+                }
+
             } else {
                 totalWordsCount += words
                 totalStepsCount += steps
                 let percentage: Double = (Double(value.count) / Double(totalCount)) * 100
-                let numRound = round(percentage * 100) / 100
-                dict["percentage"] = numRound
+                if decimalPoint > 0 {
+                    let decimalNumber = NSDecimalNumber(decimal: pow(10, decimalPoint))
+                    let numRound = round(percentage * decimalNumber.doubleValue) / decimalNumber.doubleValue
+                    dict["percentage"] = numRound
+                } else {
+                    dict["percentage"] = percentage
+                }
+                    
             }
             json[key] = dict
         }

@@ -7,12 +7,14 @@ final class Markdown {
     private var isVerbose: Bool
     private var totalCount: Int
     private let swiftUIKey = "swiftUI"
+    private let decimalPoint: Int
     
-    init(path: String, dictinary: [String: [File]], isVerbose: Bool, totalCount: Int) {
+    init(path: String, dictinary: [String: [File]], isVerbose: Bool, totalCount: Int, decimalPoint: Int) {
         self.path = path
         self.dictinary = dictinary
         self.isVerbose = isVerbose
         self.totalCount = totalCount
+        self.decimalPoint = decimalPoint
     }
     
     func write() throws {
@@ -39,14 +41,27 @@ final class Markdown {
             if key == swiftUIKey {
                 let swiftTotalCount = dictinary["swift"]?.count ?? 0
                 let percentage: Double = (Double(value.count) / Double(swiftTotalCount)) * 100
-                let numRound = round(percentage * 10) / 10
-                text.append("|\(key)  |\(value.count)  |\(steps) |\(words) |\(numRound)% (swiftUI / swift) |")
+                if (decimalPoint > 0) {
+                    let decimalNumber = NSDecimalNumber(decimal: pow(10, decimalPoint))
+                    let numRound = round(percentage * decimalNumber.doubleValue) / decimalNumber.doubleValue
+                    text.append("|\(key)  |\(value.count)  |\(steps) |\(words) |\(numRound)% (swiftUI / swift) |")
+
+                } else {
+                    text.append("|\(key)  |\(value.count)  |\(steps) |\(words) |\(percentage)% (swiftUI / swift) |")
+                }
             } else {
                 totalWordsCount += words
                 totalStepsCount += steps
                 let percentage: Double = (Double(value.count) / Double(totalCount)) * 100
-                let numRound = round(percentage * 10) / 10
-                text.append("|\(key)  |\(value.count)  |\(steps)  |\(words)  | \(numRound)%|")
+                if (decimalPoint > 0) {
+                    let decimalNumber = NSDecimalNumber(decimal: pow(10, decimalPoint))
+                    let numRound = round(percentage * decimalNumber.doubleValue) / decimalNumber.doubleValue
+                    text.append("|\(key)  |\(value.count)  |\(steps)  |\(words)  | \(numRound)%|")
+
+                } else {
+                    text.append("|\(key)  |\(value.count)  |\(steps)  |\(words)  | \(percentage)%|")
+
+                }
             }
         }
         text.append("|**Total**  |**\(totalCount)** |**\(totalStepsCount)**  |**\(totalWordsCount)**  |100%  |")
