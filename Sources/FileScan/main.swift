@@ -3,7 +3,7 @@ import Commander
 import Files
 
 let main = command(
-    Option<String?>("sourcePath", default: ".", description: "parse file paths"),
+    Option<String?>("sourcePath", default: nil, description: "parse file paths"),
     Option<String?>("output_path", default: nil, description: "out put files"),
     Option<String?>("ignore_paths", default: nil, description: "ignore files"),
     Option<String>("verbose", default: "false", description: "Display the log"),
