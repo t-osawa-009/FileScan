@@ -41,13 +41,13 @@ final class JSON {
             if key == swiftUIKey {
                 let swiftTotalCount = dictinary["swift"]?.count ?? 0
                 let percentage: Double = (Double(value.count) / Double(swiftTotalCount)) * 100
-                let numRound = round(percentage * 10) / 10
+                let numRound = round(percentage * 100) / 100
                 dict["percentage"] = numRound
             } else {
                 totalWordsCount += words
                 totalStepsCount += steps
                 let percentage: Double = (Double(value.count) / Double(totalCount)) * 100
-                let numRound = round(percentage * 10) / 10
+                let numRound = round(percentage * 100) / 100
                 dict["percentage"] = numRound
             }
             json[key] = dict

@@ -39,7 +39,7 @@ final class CSV {
             if key == swiftUIKey {
                 let swiftTotalCount = dictinary["swift"]?.count ?? 0
                 let percentage: Double = (Double(value.count) / Double(swiftTotalCount)) * 100
-                let numRound = round(percentage * 10) / 10
+                let numRound = round(percentage * 100) / 100
                 text.append("""
 "\(key)",\(value.count),\(steps),\(words),\(numRound)
 """)
@@ -47,7 +47,7 @@ final class CSV {
                 totalWordsCount += words
                 totalStepsCount += steps
                 let percentage: Double = (Double(value.count) / Double(totalCount)) * 100
-                let numRound = round(percentage * 10) / 10
+                let numRound = round(percentage * 100) / 100
                 text.append("""
 "\(key)",\(value.count),\(steps),\(words),\(numRound)
 """)
