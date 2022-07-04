@@ -92,12 +92,13 @@ let main = command(
 
 func find(folder: Folder) -> [File] {
     var files: [File] = []
-    if folder.subfolders.count() == 0 {
+    // empty check
+    if folder.subfolders.first == nil {
         files.append(contentsOf: folder.files)
     } else {
         folder.subfolders.forEach { folder in
             files.append(contentsOf: folder.files)
-            if folder.subfolders.count() > 0 {
+            if folder.subfolders.first != nil {
                 files.append(contentsOf: find(folder: folder))
             }
         }
