@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -16,7 +16,7 @@ let package = Package(
         .package(url: "https://github.com/JohnSundell/Files.git", from: "4.2.0")
     ],
     targets: [
-        .target(
+        .executableTarget(
             name: "FileScan",
             dependencies: ["Files", "Commander"]),
         .testTarget(
